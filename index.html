@@ -39,7 +39,15 @@
     border-radius: 999px; padding: 8px 8px 8px 20px;
     z-index: 100;
   }
-  nav .brand{font-weight:600; font-size:14px; color:var(--cyan); margin-right:16px;}
+  nav .brand{font-weight:600; font-size:14px; color:var(--cyan); margin-right:16px; display:flex; align-items:center; gap:8px;}
+  nav .brand svg{ flex-shrink:0; }
+  .flow-line{ stroke: var(--node-idle); stroke-width:5; fill:none; }
+  .flow-line.animated{ stroke: var(--cyan); stroke-dasharray: 8 8; animation: dash 1.4s linear infinite; }
+  @keyframes dash{ to{ stroke-dashoffset: -32; } }
+  .node-circle{ fill: #0A0E14; stroke: var(--node-idle); stroke-width:5; }
+  .node-circle.active{ stroke: var(--cyan); }
+  .node-pulse{ fill: var(--cyan); animation: nodepulse 2s ease-in-out infinite; }
+  @keyframes nodepulse{ 0%,100%{opacity:.5;} 50%{opacity:1;} }
   nav a{
     color: var(--text-dim); text-decoration:none; font-size:14px; font-weight:500;
     padding: 9px 16px; border-radius:999px; transition: all .2s ease;
@@ -50,9 +58,19 @@
   /* HERO */
   .hero{
     min-height:100vh; display:flex; align-items:center;
-    max-width:820px; margin:0 auto; padding: 140px 40px 80px;
+    max-width:1180px; margin:0 auto; padding: 140px 40px 80px;
+    gap: 60px;
   }
-  .hero-copy{ flex:1; }
+  .hero-graph{ flex: 0 0 420px; }
+  .hero-graph svg{ width:100%; height:auto; }
+  .hg-line{ stroke: var(--node-idle); stroke-width:1.5; fill:none; }
+  .hg-line.animated{ stroke: var(--cyan); stroke-dasharray: 6 6; animation: hgdash 1.4s linear infinite; }
+  @keyframes hgdash{ to{ stroke-dashoffset: -24; } }
+  .hg-node{ fill: var(--bg-soft); stroke: var(--node-idle); stroke-width:1.5; }
+  .hg-node.active{ stroke: var(--cyan); }
+  .hg-pulse{ fill: var(--cyan); animation: hgpulse 2s ease-in-out infinite; }
+  @keyframes hgpulse{ 0%,100%{opacity:.5; r:4;} 50%{opacity:1; r:6;} }
+  .hero-copy{ flex:1; min-width:280px; }
   .eyebrow{
     color: var(--amber); font-size:13px; font-weight:600; letter-spacing:.08em;
     text-transform:uppercase; margin-bottom:18px; display:flex; align-items:center; gap:8px;
@@ -188,7 +206,21 @@
 <body>
 
 <nav aria-label="Primary">
-  <span class="brand mono">JOSH.DEV</span>
+  <span class="brand mono">
+    <svg width="26" height="26" viewBox="0 0 340 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="flow-line animated" d="M 55 45 C 100 45, 100 100, 150 100" />
+      <path class="flow-line animated" d="M 150 100 C 195 100, 195 155, 150 155" />
+      <path class="flow-line animated" d="M 150 155 C 105 155, 105 210, 55 210" />
+      <path class="flow-line animated" d="M 150 155 C 195 155, 225 185, 245 235" />
+      <circle class="node-circle active" cx="55" cy="45" r="20"/>
+      <circle class="node-pulse" cx="55" cy="45" r="3"/>
+      <circle class="node-circle active" cx="150" cy="100" r="20"/>
+      <circle class="node-circle active" cx="150" cy="155" r="20"/>
+      <circle class="node-circle active" cx="55" cy="210" r="20"/>
+      <circle class="node-circle active" cx="245" cy="235" r="20"/>
+    </svg>
+    JOSH.DEV
+  </span>
   <a href="#about">About Me</a>
   <a href="#projects">My Projects</a>
   <a href="#resume">Resume</a>
@@ -196,6 +228,21 @@
 
 <section class="hero" id="top">
 
+  <div class="hero-graph" aria-hidden="true">
+    <svg viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg">
+      <path class="hg-line animated" d="M 70 60 C 140 60, 140 130, 200 130" />
+      <path class="hg-line animated" d="M 200 130 C 260 130, 260 210, 200 210" />
+      <path class="hg-line animated" d="M 200 210 C 140 210, 140 290, 70 290" />
+      <path class="hg-line animated" d="M 200 210 C 260 210, 300 250, 320 320" />
+
+      <circle class="hg-node active" cx="70" cy="60" r="26"/>
+      <circle class="hg-pulse" cx="70" cy="60" r="4"/>
+      <circle class="hg-node active" cx="200" cy="130" r="26"/>
+      <circle class="hg-node active" cx="200" cy="210" r="26"/>
+      <circle class="hg-node active" cx="70" cy="290" r="26"/>
+      <circle class="hg-node active" cx="320" cy="320" r="26"/>
+    </svg>
+  </div>
 
   <div class="hero-copy">
     <div class="eyebrow mono">Available for freelance work</div>

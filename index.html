@@ -182,6 +182,39 @@
   .project-card h3{ font-size:1.15rem; margin-bottom:10px; font-weight:600; }
   .project-card p{ color:var(--text-dim); font-size:14px; line-height:1.65; }
 
+  .watch-demo{
+    display:inline-flex; align-items:center; gap:6px; margin-top:14px;
+    background:none; border:1px solid var(--panel-border); color: var(--cyan);
+    font-family:'JetBrains Mono', monospace; font-size:12.5px; padding:8px 14px;
+    border-radius:8px; cursor:pointer; transition: all .2s ease;
+  }
+  .watch-demo:hover{ border-color: var(--cyan); background: rgba(53,225,193,0.08); }
+
+  .modal-overlay{
+    position: fixed; inset:0; background: rgba(6,9,15,0.82); backdrop-filter: blur(6px);
+    display:none; align-items:center; justify-content:center; z-index:1000; padding:24px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    background: var(--bg-soft); border:1px solid var(--panel-border); border-radius:18px;
+    max-width:720px; width:100%; max-height:88vh; overflow-y:auto; padding:28px;
+    position:relative;
+  }
+  .modal-close{
+    position:absolute; top:18px; right:18px; width:32px; height:32px; border-radius:50%;
+    background: var(--panel); border:1px solid var(--panel-border); color: var(--text);
+    font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{ border-color: var(--cyan); color: var(--cyan); }
+  .modal-tag{ font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--amber); }
+  .modal-box h3{ font-size:1.35rem; margin: 8px 0 18px; }
+  .modal-video{
+    width:100%; aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden;
+    margin-bottom:18px; border:1px solid var(--panel-border);
+  }
+  .modal-video video, .modal-video iframe{ width:100%; height:100%; display:block; border:none; }
+  .modal-box p{ color: var(--text-dim); font-size:14.5px; line-height:1.7; }
+
   .resume-panel{
     background: linear-gradient(135deg, rgba(53,225,193,0.08), rgba(245,166,35,0.05));
     border:1px solid var(--panel-border); border-radius:20px; padding:48px;
@@ -295,15 +328,43 @@
       <span class="project-tag mono">n8n · Content · 6 workflows</span>
       <h3>"Straight Facts" FB Automation</h3>
       <p><strong style="color:var(--text)">How it works:</strong> a six-workflow n8n pipeline that runs a Facebook content page end to end. An AI step drafts the caption and generates the matching image (OpenRouter, Gemini 2.5 Flash Image), the post then moves through an approval workflow and a grading step to filter out weak drafts, and an approved post is queued and published automatically on schedule. All post data lives in Supabase — it was originally tracked in Google Sheets, migrated over as the volume grew.</p>
+      <button class="watch-demo" onclick="openModal(0)">▶ Watch Demo</button>
     </div>
     <div class="project-card">
       <span class="project-tag mono">n8n · HR Ops</span>
       <h3>Holiday Email Automation</h3>
       <p><strong style="color:var(--text)">How it works:</strong> the workflow checks a table of upcoming Philippine public holidays and, when one's approaching, auto-generates a formal HR memo in the company's official template. That draft routes to HR by email with one-click Approve/Reject buttons; once approved, it's distributed automatically to hundreds of employees across the company's domains — no more manual copy-paste memos or delayed holiday notices.</p>
+      <button class="watch-demo" onclick="openModal(1)">▶ Watch Demo</button>
     </div>
   </div>
   <p style="color:var(--text-dim); font-size:13px; margin-top:24px;">More projects in progress — this list will grow.</p>
 </section>
+
+<div class="modal-overlay" id="projectModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <span class="modal-tag mono" id="modalTag"></span>
+    <h3 class="display" id="modalTitle"></h3>
+    <div class="modal-video">
+      <!--
+        Put your video here. Two options:
+
+        OPTION 1 — a video file you host yourself (e.g. demo1.mp4 sitting next to this HTML file):
+        <video controls poster="demo1-poster.jpg">
+          <source src="demo1.mp4" type="video/mp4">
+        </video>
+
+        OPTION 2 — a YouTube/Loom link (replace VIDEO_ID with the real one):
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+      -->
+      <video id="modalVideo" controls style="display:none;">
+        <source id="modalVideoSource" src="" type="video/mp4">
+      </video>
+      <iframe id="modalIframe" style="display:none;" allowfullscreen></iframe>
+    </div>
+    <p id="modalDesc"></p>
+  </div>
+</div>
 
 <section id="resume">
   <div class="resume-panel">
@@ -318,6 +379,60 @@
 <footer>
   <p class="mono">Built with n8n-grade patience — © Josh, 2026</p>
 </footer>
+
+<script>
+  const projects = [
+    {
+      tag: "n8n · Content · 6 workflows",
+      title: '"Straight Facts" FB Automation',
+      // Swap this for your real video file name, e.g. "straight-facts-demo.mp4"
+      videoSrc: "",
+      desc: "Watch the pipeline run end to end: trigger fires, AI drafts the caption and image, the post moves through approval and grading, then publishes automatically."
+    },
+    {
+      tag: "n8n · HR Ops",
+      title: "Holiday Email Automation",
+      videoSrc: "",
+      desc: "Watch the memo get generated, routed to HR for one-click approval, and distributed automatically once approved."
+    }
+  ];
+
+  function openModal(i){
+    const p = projects[i];
+    document.getElementById('modalTag').textContent = p.tag;
+    document.getElementById('modalTitle').textContent = p.title;
+    document.getElementById('modalDesc').textContent = p.desc;
+
+    const video = document.getElementById('modalVideo');
+    const source = document.getElementById('modalVideoSource');
+    const iframe = document.getElementById('modalIframe');
+
+    if(p.videoSrc){
+      source.src = p.videoSrc;
+      video.style.display = 'block';
+      iframe.style.display = 'none';
+      video.load();
+    } else {
+      // No video added yet — nothing plays until you set videoSrc above
+      video.style.display = 'none';
+      iframe.style.display = 'none';
+    }
+
+    document.getElementById('projectModal').classList.add('open');
+  }
+
+  function closeModal(){
+    document.getElementById('projectModal').classList.remove('open');
+    document.getElementById('modalVideo').pause();
+  }
+
+  document.getElementById('projectModal').addEventListener('click', (e) => {
+    if(e.target.id === 'projectModal') closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeModal();
+  });
+</script>
 
 </body>
 </html>

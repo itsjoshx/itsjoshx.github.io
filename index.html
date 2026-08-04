@@ -339,6 +339,12 @@ The workflow uses AI to generate both the post caption and matching image (OpenR
       <p><strong style="color:var(--text)">How it works:</strong> the workflow checks a table of upcoming Philippine public holidays and, when one's approaching, auto-generates a formal HR memo in the company's official template. That draft routes to HR by email with one-click Approve/Reject buttons; once approved, it's distributed automatically to hundreds of employees across the company's domains — no more manual copy-paste memos or delayed holiday notices.</p>
       <button class="watch-demo" onclick="openModal(1)">▶ Watch Demo</button>
     </div>
+    <div class="project-card">
+      <span class="project-tag mono">n8n · Scheduled Trigger</span>
+      <h3>Inspire Bot 2.0</h3>
+      <p><strong style="color:var(--text)">How it works:</strong> a scheduled n8n workflow that fires every morning at 7am and sends out an inspirational quote — a small daily nudge delivered automatically, with no manual posting involved.</p>
+      <button class="watch-demo" onclick="openModal(2)">▶ Watch Demo</button>
+    </div>
   </div>
   <p style="color:var(--text-dim); font-size:13px; margin-top:24px;">More projects in progress — this list will grow.</p>
 </section>
@@ -397,6 +403,13 @@ The workflow uses AI to generate both the post caption and matching image (OpenR
       title: "Holiday Email Automation",
       videoSrc: "HRHolidayAutomation.mp4",
       desc: "Watch the memo get generated, routed to HR for one-click approval, and distributed automatically once approved."
+    },
+    {
+      tag: "n8n · Scheduled Trigger",
+      title: "Inspire Bot 2.0",
+      videoSrc: "",
+      embedSrc: "PASTE_YOUR_LINK_HERE",
+      desc: "Watch the 7am trigger fire and send out the daily inspirational quote automatically."
     }
   ];
 
@@ -415,8 +428,12 @@ The workflow uses AI to generate both the post caption and matching image (OpenR
       video.style.display = 'block';
       iframe.style.display = 'none';
       video.load();
+    } else if(p.embedSrc){
+      iframe.src = p.embedSrc;
+      iframe.style.display = 'block';
+      video.style.display = 'none';
     } else {
-      // No video added yet — nothing plays until you set videoSrc above
+      // No video added yet — nothing plays until you set videoSrc or embedSrc above
       video.style.display = 'none';
       iframe.style.display = 'none';
     }
